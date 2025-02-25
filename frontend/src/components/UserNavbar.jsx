@@ -18,7 +18,7 @@ const UserNavbar = () => {
 
   return (
     <div className='flex items-center justify-between text-sm  mb-5 border-b px-14 py-4 border-b-[#ADADAD] w-full'>
-      <h1 className='text-[#006400] font-bold text-2xl cursor-pointer'  onClick={()=>navigate('/')}>Medify</h1>
+      <h1 className='text-[#4CAF50] font-bold text-2xl cursor-pointer'  onClick={()=>navigate('/')}>Medify</h1>
       <ul className='md:flex items-start gap-5 font-medium hidden'>
         <NavLink to='/' >
           <li className='py-1'>HOME</li>
@@ -56,7 +56,7 @@ const UserNavbar = () => {
                 </div>
               </div>
             </div>
-            : <button onClick={() => navigate('/login')} className='bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block'>Create account</button>
+            : <button onClick={() => navigate('/login')} className='bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block hover:bg-green-700'>Login</button>
         }
         <img onClick={() => setShowMenu(true)} className='w-6 md:hidden' src={assets.menu_icon} alt="" />
 
