@@ -9,7 +9,7 @@ doctorRouter.get("/appointments", authDoctor, appointmentsDoctor)
 doctorRouter.get("/list", doctorList)
 doctorRouter.post("/change-availability", authDoctor, changeAvailablity)
 doctorRouter.post("/complete-appointment", authDoctor, appointmentComplete)
-doctorRouter.get("/dashboard", authDoctor, doctorDashboard)
+doctorRouter.get("/dashboard/:id", authDoctor, doctorDashboard)
 doctorRouter.get("/profile", authDoctor, doctorProfile)
 doctorRouter.post("/update-profile", authDoctor, updateDoctorProfile)
 
