@@ -51,19 +51,28 @@ const loginAdmin = async (req, res) => {
     }
 
     // Generate JWT token with the admin's email as the payload
-    const token = jwt.sign(
+    let token;
+    let isSuperAdmin = false;
+
+    // Check if the email is the superadmin email
+    if (email === process.env.SUPER_ADMIN_EMAIL) {
+      console.log("super admin came");
+      isSuperAdmin = true;
+    }
+
+    token = jwt.sign(
       { email: admin.email, id: admin._id },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    res.json({ success: true, token });
+    // Send the token and isSuperAdmin flag in the response
+    res.json({ success: true, token, isSuperAdmin });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
   }
 };
-
 // API to get all appointments list
 const appointmentsAdmin = async (req, res) => {
   try {
@@ -92,9 +101,9 @@ const appointmentCancel = async (req, res) => {
 
 // API for adding Doctor
 const addDoctor = async (req, res) => {
-  console.log(req.body);  // Check if form data is properly sent
-  console.log(req.file);  // Check if image file is sent
-  
+  console.log(req.body); // Check if form data is properly sent
+  console.log(req.file); // Check if image file is sent
+
   try {
     const {
       name,
@@ -106,11 +115,11 @@ const addDoctor = async (req, res) => {
       about,
       fees,
       address,
-      adminId,  // Ensure you're using 'adminId'
-      hospitalName
+      adminId, // Ensure you're using 'adminId'
+      hospitalName,
     } = req.body;
     const imageFile = req.file;
-    console.log(adminId,hospitalName)
+    console.log(adminId, hospitalName);
 
     // Debugging for missing fields
     let missingFields = [];
@@ -128,9 +137,9 @@ const addDoctor = async (req, res) => {
     if (!imageFile) missingFields.push("image");
 
     if (missingFields.length > 0) {
-      return res.json({ 
-        success: false, 
-        message: `Missing the following details: ${missingFields.join(', ')}` 
+      return res.json({
+        success: false,
+        message: `Missing the following details: ${missingFields.join(", ")}`,
       });
     }
 
@@ -170,11 +179,11 @@ const addDoctor = async (req, res) => {
       degree,
       experience,
       about,
-       adminId, 
+      adminId,
       hospitalName,
       fees,
-      address: JSON.parse(address), 
-      date: Date.now(), 
+      address: JSON.parse(address),
+      date: Date.now(),
     };
 
     // Save the doctor
@@ -186,8 +195,6 @@ const addDoctor = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
-
-
 
 // API to get all doctors list for admin panel
 const allDoctors = async (req, res) => {
@@ -206,20 +213,20 @@ const allDoctorsByAdmin = async (req, res) => {
     const { adminId } = req.body;
 
     // Find all doctors where adminId matches
-    const doctors = await doctorModel.find({ adminId: adminId })
+    const doctors = await doctorModel
+      .find({ adminId: adminId })
       .select("-password")
-      .populate('adminId', 'hospitalName email'); // Optionally populate admin details
+      .populate("adminId", "hospitalName email"); // Optionally populate admin details
 
-    res.json({ 
-      success: true, 
-      doctors 
+    res.json({
+      success: true,
+      doctors,
     });
-    
   } catch (error) {
     console.log(error);
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };
@@ -494,7 +501,7 @@ const getCurrentAdminDetails = async (req, res) => {
 
     // Return the admin details (excluding the password)
     const adminDetails = {
-      id:admin.id,
+      id: admin.id,
       hospitalName: admin.hospitalName,
       adminName: admin.adminName,
       email: admin.email,

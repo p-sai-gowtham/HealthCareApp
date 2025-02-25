@@ -2,8 +2,7 @@ import React, { useState, useContext } from "react";
 import { DoctorContext } from "../context/DoctorContext";
 import { AdminContext } from "../context/AdminContext";
 import { AlertCircle, ArrowLeft, Hospital } from "lucide-react";
-import { Link, useNavigate } from 'react-router-dom'
-
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [state, setState] = useState("Admin");
@@ -14,7 +13,7 @@ const Login = () => {
   const [error, setError] = useState("");
 
   const { setDToken } = useContext(DoctorContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { setAToken } = useContext(AdminContext);
   const backendUrl = "http://localhost:4000";
 
@@ -33,17 +32,21 @@ const Login = () => {
         },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await response.json();
+      console.log("data", data);
+      const isSuperAdmin = data.isSuperAdmin;
+      if (isSuperAdmin) {
+        localStorage.setItem("isSuperAdmin", isSuperAdmin);
+      }
 
       if (data.success) {
         if (state === "Admin") {
           setAToken(data.token);
-          navigate('/')
+          navigate("/");
           localStorage.setItem("aToken", data.token);
         } else {
           setDToken(data.token);
-          navigate('/')
+          navigate("/");
 
           localStorage.setItem("dToken", data.token);
         }
@@ -169,12 +172,13 @@ const Login = () => {
             </p>
 
             <p className="text-center text-sm text-gray-600">
-                  User Login?{" "}
-
-                  <Link to={'/ulogin'} className='text-primary underline cursor-pointer hover:text-blue-700'>
-                      Click here
-                  </Link>
-             
+              User Login?{" "}
+              <Link
+                to={"/ulogin"}
+                className="text-primary underline cursor-pointer hover:text-blue-700"
+              >
+                Click here
+              </Link>
             </p>
           </>
         )}
