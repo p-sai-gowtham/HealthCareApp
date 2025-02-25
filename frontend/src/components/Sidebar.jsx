@@ -9,8 +9,6 @@ const Sidebar = () => {
   const isSuperAdmin = localStorage.getItem("isSuperAdmin");
 
   const { aToken } = useContext(AdminContext);
-  console.log("atoken is ", aToken, dToken, isSuperAdmin);
-
   return (
     <div className="min-h-screen bg-white border-r">
       {aToken && !isSuperAdmin && (

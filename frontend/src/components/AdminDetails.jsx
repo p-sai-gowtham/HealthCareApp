@@ -21,8 +21,7 @@ const AdminDetails = () => {
     getAllRegistrations();
   }, []);
 
-  console.log(registrations);
-  
+  // console.log(registrations);
 
   useEffect(() => {
     const fetchAdminDetails = async () => {
