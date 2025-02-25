@@ -8,10 +8,6 @@ import {
   bookAppointment,
   listAppointment,
   cancelAppointment,
-  paymentRazorpay,
-  verifyRazorpay,
-  paymentStripe,
-  verifyStripe,
   hospitalList,
 } from "../controllers/userController.js";
 
@@ -35,10 +31,6 @@ userRouter.post("/book-appointment", authUser, bookAppointment);
 userRouter.get("/appointments", authUser, listAppointment);
 userRouter.get("/hospitals", hospitalList);
 userRouter.post("/cancel-appointment", authUser, cancelAppointment);
-userRouter.post("/payment-razorpay", authUser, paymentRazorpay);
-userRouter.post("/verifyRazorpay", authUser, verifyRazorpay);
-userRouter.post("/payment-stripe", authUser, paymentStripe);
-userRouter.post("/verifyStripe", authUser, verifyStripe);
 userRouter.get("/doctors/:id", getDoctorsByAdminId);
 
 export default userRouter;
