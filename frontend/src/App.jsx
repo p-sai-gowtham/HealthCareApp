@@ -18,56 +18,66 @@ import DoctorDashboard from "./pages/Doctor/DoctorDashboard";
 import DoctorProfile from "./pages/Doctor/DoctorProfile";
 import AdminRegisteration from "./pages/Admin/AdminRegisteration";
 import AdminDetails from "./components/AdminDetails";
-import Home from './pages/Home'
-import Doctors from './pages/Doctors'
-import About from './pages/About'
-import Contact from './pages/Contact'
-import Appointment from './pages/Appointment'
-import MyAppointments from './pages/MyAppointments'
-import MyProfile from './pages/MyProfile'
-import Verify from './pages/Verify'
+import Home from "./pages/Home";
+import Doctors from "./pages/Doctors";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Appointment from "./pages/Appointment";
+import MyAppointments from "./pages/MyAppointments";
+import MyProfile from "./pages/MyProfile";
+import Verify from "./pages/Verify";
 import Hospitals from "./pages/Hospitals";
-import HospitalDoctors from "./pages/HospitalDoctors"
+import HospitalDoctors from "./pages/HospitalDoctors";
 
 const App = () => {
   const { dToken } = useContext(DoctorContext);
   const { aToken } = useContext(AdminContext);
 
   return (
-    <div className="bg-[#F8F9FD] flex justify-center items-center flex-col ">
+    <div className="bg-[#F8F9FD] flex justify-center items-center flex-col w-full ">
       <ToastContainer />
-      { aToken || dToken ? <Navbar /> :<UserNavbar />}
-      
+      {aToken || dToken ? <Navbar /> : <UserNavbar />}
+
       <div className="flex items-start w-full ">
         <Sidebar />
         <Routes>
-              <Route path="/" element={ aToken ? ( <AdminDetails /> ) : dToken ? ( <DoctorDashboard /> ) : ( <Home /> )  } />
-              <Route path='/login'  element={<Login />} />
-              <Route path="/admin-dashboard" element={<Dashboard />} />
-              <Route path="/all-appointments" element={<AllAppointments />} />
-              <Route path="/add-doctor" element={<AddDoctor />} />
-              <Route path="/doctor-list" element={<DoctorsList />} />
-              <Route path="/approve-admin" element={<AdminRegisteration />} />
-              <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
-              <Route path="/doctor-appointments" element={<DoctorAppointments />} />
-              <Route path="/doctor-profile" element={<DoctorProfile />} />
-              <Route path='/hospitals' element={<Hospitals/>} />
-              <Route path='/' element={<Home />} />
-              <Route path='/doctors' element={<Doctors />} />
-              <Route path='/doctors/:speciality' element={<Doctors />} />
-              <Route path='/ulogin' element={<UserLogin />} />
-              <Route path='/about' element={<About />} />
-              <Route path='/contact' element={<Contact />} />
-              <Route path='/appointment/:docId' element={<Appointment />} />
-              <Route path='/my-appointments' element={<MyAppointments />} />
-              <Route path='/my-profile' element={<MyProfile />} />
-              {/* <Route path='/verify' element={<Verify />} /> */}
-              <Route path="/hospital/:id" element={<HospitalDoctors />} />
-
+          <Route
+            path="/"
+            element={
+              aToken ? (
+                <AdminDetails />
+              ) : dToken ? (
+                <DoctorDashboard />
+              ) : (
+                <Home />
+              )
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin-dashboard" element={<Dashboard />} />
+          <Route path="/all-appointments" element={<AllAppointments />} />
+          <Route path="/add-doctor" element={<AddDoctor />} />
+          <Route path="/doctor-list" element={<DoctorsList />} />
+          <Route path="/approve-admin" element={<AdminRegisteration />} />
+          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+          <Route path="/doctor-appointments" element={<DoctorAppointments />} />
+          <Route path="/doctor-profile" element={<DoctorProfile />} />
+          <Route path="/hospitals" element={<Hospitals />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/doctors" element={<Doctors />} />
+          <Route path="/doctors/:speciality" element={<Doctors />} />
+          <Route path="/ulogin" element={<UserLogin />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/appointment/:docId" element={<Appointment />} />
+          <Route path="/my-appointments" element={<MyAppointments />} />
+          <Route path="/my-profile" element={<MyProfile />} />
+          {/* <Route path='/verify' element={<Verify />} /> */}
+          <Route path="/hospital/:id" element={<HospitalDoctors />} />
         </Routes>
       </div>
     </div>
-  )
+  );
 };
 
 export default App;
