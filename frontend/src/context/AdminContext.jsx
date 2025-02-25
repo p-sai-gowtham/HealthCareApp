@@ -258,6 +258,7 @@ const AdminContextProvider = (props) => {
       });
 
       if (data.success) {
+        console.log("Dashboard data:", data.dashData);
         setDashData(data.dashData); // Store dashboard data in state
       } else {
         toast.error(data.message); // If not successful, display error message
@@ -282,7 +283,7 @@ const AdminContextProvider = (props) => {
     getAllRegistrations,
     getAllDoctorsByAdmin,
     registrations,
-    dashData,
+    dashData,fetchAdminDetails,
     approveAdmin,
     doctorsByAdmin,
     rejectAdmin,

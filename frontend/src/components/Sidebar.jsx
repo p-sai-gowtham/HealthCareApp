@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import { NavLink } from "react-router-dom";
 import { DoctorContext } from "../context/DoctorContext";
@@ -7,6 +7,24 @@ import { AdminContext } from "../context/AdminContext";
 const Sidebar = () => {
   const { dToken } = useContext(DoctorContext);
   const { aToken } = useContext(AdminContext);
+  const [adminDetails, setAdminDetails] = useState({});
+  const { registrations, getAllRegistrations, approveAdmin, rejectAdmin, fetchAdminDetails } =
+    useContext(AdminContext);
+
+  useEffect(() => {
+    getAllRegistrations();
+    fetchAdminDetails();
+  }, []); 
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      const adminDetails = await fetchAdminDetails();
+      console.log('Admin Details fetched:', adminDetails);
+      setAdminDetails(adminDetails);
+    };
+    
+    fetchDetails();
+  }, [fetchAdminDetails]);
 
   return (
     <div className="min-h-screen bg-white border-r">
@@ -56,17 +74,19 @@ const Sidebar = () => {
             <img className="min-w-5" src={assets.people_icon} alt="" />
             <p className="hidden md:block">Doctors List</p>
           </NavLink>
-          <NavLink
-            to={"/approve-admin"}
-            className={({ isActive }) =>
-              `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
-                isActive ? "bg-[#F2F3FF] border-r-4 border-primary" : ""
-              }`
-            }
-          >
-            <img className="min-w-5" src={assets.people_icon} alt="" />
-            <p className="hidden md:block">Approve Admins</p>
-          </NavLink>
+          {adminDetails.email === "superadmin@gmail.com" && (
+            <NavLink
+              to={"/approve-admin"}
+              className={({ isActive }) =>
+                `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
+                  isActive ? "bg-[#F2F3FF] border-r-4 border-primary" : ""
+                }`
+              }
+            >
+              <img className="min-w-5" src={assets.people_icon} alt="" />
+              <p className="hidden md:block">Approve Admins</p>
+            </NavLink>
+          )}
         </ul>
       )}
 

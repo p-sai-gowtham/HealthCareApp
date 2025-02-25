@@ -226,8 +226,10 @@ const allDoctorsByAdmin = async (req, res) => {
 
 // API to get dashboard data for admin panel
 const adminDashboard = async (req, res) => {
+  const { adminId } = req.body;
+
   try {
-    const doctors = await doctorModel.find({});
+    const doctors = await doctorModel.find({ adminId: adminId });
     const users = await userModel.find({});
     const appointments = await appointmentModel.find({});
 

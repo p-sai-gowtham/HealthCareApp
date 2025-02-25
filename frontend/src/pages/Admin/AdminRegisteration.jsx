@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { AdminContext } from "../../context/AdminContext";
 
 const AdminRegistration = () => {
-  const { registrations, getAllRegistrations, approveAdmin, rejectAdmin } =
+  const { registrations, getAllRegistrations, approveAdmin, rejectAdmin,fetchAdminDetails } =
     useContext(AdminContext);
 
   useEffect(() => {
