@@ -11,23 +11,32 @@ const Hospitals = () => {
  
   useEffect(() => {
     axios
-.get("http://localhost:4000/api/user/hospitals", { headers: { token } })
+      .get("http://localhost:4000/api/user/hospitals", { headers: { token } })
       .then((response) => {
-        setAdmins(response.data.hospitals);
+        const allAdmins = response.data.hospitals;
+        // Filter the approved admins
+        const approvedAdmins = allAdmins.filter((admin) => admin.isApproved);
+        // Set the state to the filtered approved admins
+        setAdmins(approvedAdmins);
       })
       .catch((error) => {
         console.error("There was an error fetching the admins!", error);
       });
   }, []);
+  
  
   const handleRedirect = (adminId) => {
     navigate(`/hospital/${adminId}`);
   };
+
  
   // Filter hospitals based on search input
   const filteredHospitals = admins.filter((admin) =>
     admin.hospitalName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+
+ 
  
   return (
     <div className="w-full min-h-screen bg-gray-100 py-10">

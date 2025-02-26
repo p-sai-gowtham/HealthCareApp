@@ -6,6 +6,7 @@ import validator from "validator";
 import { v2 as cloudinary } from "cloudinary";
 import userModel from "../models/userModel.js";
 import hospitalAdminModel from "../models/hospitalAdminModel.js";
+import mongoose from "mongoose";
 // API for admin login
 // const loginAdmin = async (req, res) => {
 //   try {
@@ -75,9 +76,25 @@ const loginAdmin = async (req, res) => {
 };
 // API to get all appointments list
 const appointmentsAdmin = async (req, res) => {
+  const localadminId = req.admin._id;
+
+  // Convert adminId to ObjectId
+  const adminObjectId = new mongoose.Types.ObjectId(localadminId);
+
   try {
-    const appointments = await appointmentModel.find({});
-    res.json({ success: true, appointments });
+    // Fetch the admin details using adminId (ensure it's an ObjectId)
+    const adminDetails = await hospitalAdminModel.findById(adminObjectId);
+    
+    // Get all doctor IDs associated with the admin
+    const doctorIds = adminDetails.doctors.map(doctid => doctid.toString());
+    console.log("doctorIds", doctorIds);
+
+    // Fetch appointments for all doctors
+    const appointdata = await appointmentModel.find({ docId: { $in: doctorIds } });
+    console.log("appointdata for doctors", appointdata);
+
+    // Return the appointments
+    res.json({ success: true, appointments: appointdata });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
@@ -101,9 +118,6 @@ const appointmentCancel = async (req, res) => {
 
 // API for adding Doctor
 const addDoctor = async (req, res) => {
-  console.log(req.body); // Check if form data is properly sent
-  console.log(req.file); // Check if image file is sent
-
   try {
     const {
       name,
@@ -118,8 +132,8 @@ const addDoctor = async (req, res) => {
       adminId, // Ensure you're using 'adminId'
       hospitalName,
     } = req.body;
+
     const imageFile = req.file;
-    console.log(adminId, hospitalName);
 
     // Debugging for missing fields
     let missingFields = [];
@@ -182,14 +196,38 @@ const addDoctor = async (req, res) => {
       adminId,
       hospitalName,
       fees,
-      address: JSON.parse(address),
+      address: JSON.parse(address), // Parse address to object from JSON string
       date: Date.now(),
     };
 
     // Save the doctor
     const newDoctor = new doctorModel(doctorData);
+
+    // Convert adminId to ObjectId
+    const adminObjectId = new  mongoose.Types.ObjectId(adminId);
+
+    // Fetch the admin details using adminId (ensure it's an ObjectId)
+    const adminDetails = await hospitalAdminModel.findById(adminObjectId);
+
+    // Check if admin exists
+    if (!adminDetails) {
+      return res.json({
+        success: false,
+        message: "Admin not found",
+      });
+    }
+
+    // Add the new doctor to the admin's doctors array
+    adminDetails.doctors.push(newDoctor);
+
+    // Save the updated admin document
+    await adminDetails.save();
+
+    // Save the new doctor to the database
     await newDoctor.save();
-    res.json({ success: true, message: "Doctor Added" });
+
+    // Respond with success message
+    res.json({ success: true, message: "Doctor Added Successfully" });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
@@ -234,10 +272,22 @@ const allDoctorsByAdmin = async (req, res) => {
 // API to get dashboard data for admin panel
 const adminDashboard = async (req, res) => {
   try {
-    const doctors = await doctorModel.find({});
-    const users = await userModel.find({});
-    const appointments = await appointmentModel.find({});
+    const { adminId } = req.query; // Extract adminId from the query parameters
 
+    // Find all doctors for the admin
+    const doctors = await doctorModel.find({ adminId });
+    const doctorIds = doctors.map((doctor) => doctor._id.toString()); // Extract doctorIds
+
+    // Find all appointments that match any of the doctorIds
+    const appointments = await appointmentModel.find({ docId: { $in: doctorIds } });
+
+    // Extract user IDs from the appointments (no duplicates)
+    const userIds = [...new Set(appointments.map(appointment => appointment.userId.toString()))];
+
+    // Find the unique users associated with the appointment userIds
+    const users = await userModel.find({ _id: { $in: userIds } });
+
+    // Prepare dashboard data
     const dashData = {
       doctors: doctors.length,
       appointments: appointments.length,
@@ -251,6 +301,9 @@ const adminDashboard = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+
+
+
 
 // hospital
 

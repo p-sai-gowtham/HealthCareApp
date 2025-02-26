@@ -117,7 +117,7 @@ const AddDoctor = () => {
           {
             headers: {
               aToken: aToken,  // Pass your auth token here
-            },
+            }
           }
         );
     
@@ -141,6 +141,7 @@ const AddDoctor = () => {
         console.log(error);
       }
     };
+    
     
 
   return (
