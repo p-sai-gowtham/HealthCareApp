@@ -4,7 +4,7 @@ import axios from "axios";
 
 const HospitalDoctors = () => {
   const { id } = useParams(); // Get the adminId from the URL
-  console.log(id);
+  //console.log(id);
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
