@@ -115,10 +115,21 @@ const MyProfile = () => {
             </div>
             <div className='mt-10'>
 
-                {isEdit
-                    ? <button onClick={updateUserProfileData} className='border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all'>Save information</button>
-                    : <button onClick={() => setIsEdit(true)} className='border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all'>Edit</button>
-                }
+            <div className='mt-10 flex'>
+               
+               {isEdit
+                   ? <button onClick={()=>setIsEdit(false)} className='border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all'>Cancel</button>
+                   : null
+               }
+
+
+               {isEdit
+                   ? <button onClick={updateUserProfileData} className='border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all'>Save information</button>
+                   : <button onClick={() => setIsEdit(true)} className='border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all'>Edit</button>
+               }
+
+           </div>
+                
 
             </div>
         </div>
