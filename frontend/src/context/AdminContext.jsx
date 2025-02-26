@@ -24,6 +24,7 @@ const AdminContextProvider = (props) => {
   const [doctorsByAdmin, setDoctorsByAdmin] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
+  const [adminDetails,setAdminDetails] = useState()
 
   // Function to get all hospital admin registrations from the backend API
 
@@ -143,6 +144,8 @@ const AdminContextProvider = (props) => {
 
       if (data.success) {
         // Check if the admin is approved
+        setAdminDetails(data)
+        
         if (!data.admin.isApproved) {
           throw new Error("Admin is not approved yet");
         }
@@ -157,6 +160,7 @@ const AdminContextProvider = (props) => {
       setLoading(false);
     }
   };
+
 
   const getAllDoctorsByAdmin = async () => {
     try {
@@ -210,9 +214,14 @@ const AdminContextProvider = (props) => {
 
   // Function to get all appointments from the backend API
   const getAllAppointments = async () => {
+   const admindetails = await fetchAdminDetails();
+   console.log("admindetails new",admindetails)
     try {
       const { data } = await axios.get(backendUrl + "/api/admin/appointments", {
         headers: { aToken },
+        
+        adminId : admindetails.id
+        
       });
       if (data.success) {
         setAppointments(data.appointments.reverse()); // Store appointments in state (reversed)
@@ -248,11 +257,14 @@ const AdminContextProvider = (props) => {
 
   // Function to get the dashboard data for the admin from the backend API
   const getDashData = async () => {
+    const adminDetails = await fetchAdminDetails();
+    // console.log("admin details here", adminDetails)
     try {
       const { data } = await axios.get(backendUrl + "/api/admin/dashboard", {
         headers: { aToken },
+        params: { adminId: adminDetails.id }, // Sending adminId as a query parameter
       });
-
+  
       if (data.success) {
         setDashData(data.dashData); // Store dashboard data in state
       } else {
@@ -263,6 +275,7 @@ const AdminContextProvider = (props) => {
       toast.error(error.message); // Show error message in case of failure
     }
   };
+  
 
   // The value that will be provided to all components using this context
   const value = {

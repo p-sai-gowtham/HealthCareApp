@@ -134,7 +134,7 @@ const DoctorsList = () => {
     <div className="p-6 max-h-[90vh] overflow-y-auto">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Hospital Doctors</h1>
-        <p className="text-gray-600">Total Doctors: {doctorsByAdmin.length}</p>
+        {/* <p className="text-gray-600">Total Doctors: {doctorsByAdmin.length}</p> */}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
