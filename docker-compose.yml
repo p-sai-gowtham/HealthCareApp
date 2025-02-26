@@ -1,0 +1,20 @@
+version: "3.8"
+ 
+services:
+  backend:
+    build: ./backend
+    container_name: backend_server
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      MONGO_URI: "mongodb+srv://dhanush_doctor:RESyXFPpjl2WzAPY@cluster0.06bmzbf.mongodb.net/?retryWrites=true&w=majority&appName=cluster0"
+ 
+  frontend:
+    build: ./frontend
+    container_name: frontend_app
+    restart: always
+    ports:
+      - "5174:80"
+    depends_on:
+      - backend
